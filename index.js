@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -39,7 +39,7 @@ async function run() {
         if(req.query?.limit){
             query = {limit: parseInt(req.query.limit)}
         }
-        const cursor = toyDBCollection.find().limit(query.limit);
+        const cursor = toyDBCollection.find().limit(20);
         const result = await cursor.toArray();
         res.send(result);
     })
@@ -54,6 +54,15 @@ async function run() {
         
         const result = await toyDBCollection.find(query).toArray();
         res.send(result)
+    })
+
+    // get with id
+
+    app.get('/toy/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await toyDBCollection.findOne(query);
+        res.send(result);
     })
 
     // post operation for add a toy info
