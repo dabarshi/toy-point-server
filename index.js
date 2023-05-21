@@ -10,8 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-console.log(process.env.DB_PASS)
-console.log(process.env.DB_USER)
+
 
 
 // mongodb uri
@@ -39,6 +38,12 @@ async function run() {
         const cursor = toyDBCollection.find();
         const result = await cursor.toArray();
         res.send(result);
+    })
+
+    // post operation for add a toy info
+    app.post('/toys', async(req, res) => {
+        const toyInfo = req.body;
+        console.log('toyInfo: ', toyInfo)
     })
 
     // Send a ping to confirm a successful connection
