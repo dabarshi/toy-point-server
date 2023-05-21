@@ -33,18 +33,19 @@ async function run() {
     // create database
     const toyDBCollection = client.db('toyDB').collection('toyCollection');
 
-    // simple get operation with limit query
+    // simple get operation with limit and search query
     app.get('/toys', async(req, res) => {
         let query = {};
-        if(req.query?.limit){
-            query = {limit: parseInt(req.query.limit)}
+        if(req.query?.toyName){
+            query = {toyName: req.query.toyName}
         }
-        const cursor = toyDBCollection.find().limit(20);
+        // console.log(query)
+        const cursor = toyDBCollection.find(query).limit(20);
         const result = await cursor.toArray();
         res.send(result);
     })
 
-    // get with query Email 
+    // get toys with query Email 
     app.get('/selective-toys', async(req, res) => {
        
         let query = {};
@@ -71,6 +72,15 @@ async function run() {
         console.log('toyInfo: ', toyInfo)
         const result = await toyDBCollection.insertOne(toyInfo);
         res.send(result);
+    })
+
+    // delete operation with id params 
+    app.delete('/toy/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await toyDBCollection.deleteOne(query);
+        res.send(result);
+
     })
 
     // Send a ping to confirm a successful connection
