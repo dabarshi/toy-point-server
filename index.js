@@ -74,6 +74,30 @@ async function run() {
         res.send(result);
     })
 
+    // put operation on single document
+    app.put('/toy/:id', async(req, res) => {
+        const id = req.params.id;
+        const updatedToyInfo = req.body;
+        const filter = {_id: new ObjectId(id)};
+        const options = {upsert: true};
+
+        const newToyInfo = {
+            $set: {
+                toyName: updatedToyInfo.toyName,
+                toyPhoto: updatedToyInfo.toyPhoto,
+                sellerName: updatedToyInfo.sellerName,
+                email: updatedToyInfo.email,
+                subCategory: updatedToyInfo.subCategory,
+                price: updatedToyInfo.price,
+                rating: updatedToyInfo.rating,
+                quantity: updatedToyInfo.quantity,
+                details: updatedToyInfo.details
+            }
+        }
+        console.log(newToyInfo);
+
+    })
+
     // delete operation with id params 
     app.delete('/toy/:id', async(req, res) => {
         const id = req.params.id;
