@@ -40,6 +40,18 @@ async function run() {
         res.send(result);
     })
 
+    // get with query Email 
+    app.get('/selective-toys', async(req, res) => {
+       
+        let query = {};
+        if(req.query?.email){
+            query = {email: req.query.email}
+        }
+        
+        const result = await toyDBCollection.find(query).toArray();
+        res.send(result)
+    })
+
     // post operation for add a toy info
     app.post('/toys', async(req, res) => {
         const toyInfo = req.body;
