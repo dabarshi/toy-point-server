@@ -33,9 +33,13 @@ async function run() {
     // create database
     const toyDBCollection = client.db('toyDB').collection('toyCollection');
 
-    // simple get operation
+    // simple get operation with limit query
     app.get('/toys', async(req, res) => {
-        const cursor = toyDBCollection.find();
+        let query = {};
+        if(req.query?.limit){
+            query = {limit: parseInt(req.query.limit)}
+        }
+        const cursor = toyDBCollection.find().limit(query.limit);
         const result = await cursor.toArray();
         res.send(result);
     })
