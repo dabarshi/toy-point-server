@@ -39,6 +39,9 @@ async function run() {
         if(req.query?.toyName){
             query = {toyName: req.query.toyName}
         }
+        if (req.query?.subCategory){
+            query = {subCategory: req.query.subCategory}
+        }
         // console.log(query)
         const cursor = toyDBCollection.find(query).limit(20);
         const result = await cursor.toArray();
@@ -94,7 +97,9 @@ async function run() {
                 details: updatedToyInfo.details
             }
         }
-        console.log(newToyInfo);
+        
+        const result = await toyDBCollection.updateOne(filter, newToyInfo, options);
+        res.send(result);
 
     })
 
