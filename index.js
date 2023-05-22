@@ -36,14 +36,23 @@ async function run() {
     // simple get operation with limit and search query
     app.get('/toys', async(req, res) => {
         let query = {};
+        let sorting = {};
+
+        // set query for search by toy Name
         if(req.query?.toyName){
             query = {toyName: req.query.toyName}
         }
+
+        // set query for searching subCategory
         if (req.query?.subCategory){
             query = {subCategory: req.query.subCategory}
         }
+        // set query for sorting value
+        if(req.query?.sorting){
+            sorting = {price: parseInt(req.query.sorting)}
+        }
         // console.log(query)
-        const cursor = toyDBCollection.find(query).limit(20);
+        const cursor = toyDBCollection.find(query).limit(20).sort(sorting);
         const result = await cursor.toArray();
         res.send(result);
     })
