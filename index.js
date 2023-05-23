@@ -10,6 +10,19 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// const corsConfig = {
+//     origin: '',
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE']
+// }
+// app.use(cors(corsConfig))
+// app.options("", cors(corsConfig))
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+  });
+
 
 
 
@@ -28,7 +41,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+ 
 
         // create database
         const toyDBCollection = client.db('toyDB').collection('toyCollection');
@@ -71,6 +84,12 @@ async function run() {
 
             const result = await toyDBCollection.find(query).sort(sorting).toArray();
             res.send(result)
+        })
+
+        // get the new data with limit 3 
+        app.get('/new-toys', async(req, res) => {
+            const result = await toyDBCollection.find().sort({_id: -1}).limit(3).toArray();
+            res.send(result);
         })
 
         // get with id
@@ -126,8 +145,8 @@ async function run() {
         })
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
