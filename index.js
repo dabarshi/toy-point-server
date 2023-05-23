@@ -18,10 +18,10 @@ app.use(express.json());
 // app.use(cors(corsConfig))
 // app.options("", cors(corsConfig))
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-  });
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     next();
+//   });
 
 
 
@@ -118,13 +118,7 @@ async function run() {
 
             const newToyInfo = {
                 $set: {
-                    toyName: updatedToyInfo.toyName,
-                    toyPhoto: updatedToyInfo.toyPhoto,
-                    sellerName: updatedToyInfo.sellerName,
-                    email: updatedToyInfo.email,
-                    subCategory: updatedToyInfo.subCategory,
                     price: updatedToyInfo.price,
-                    rating: updatedToyInfo.rating,
                     quantity: updatedToyInfo.quantity,
                     details: updatedToyInfo.details
                 }
